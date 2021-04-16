@@ -1,0 +1,22 @@
+#!/bin/bash
+# C3 Testing Script 
+# Tests an already checked c file by running C3 and then attempting to compile
+
+if [ -z $C3_DIR ]  
+then
+  echo "Please set \$C3_DIR to point to the C3 directory"
+  exit 1
+fi
+
+if [ -z $1 ]
+then
+  echo Usage: $0 "<test_file>"
+  exit 1
+fi
+
+TARGET=$(realpath $1)
+
+set -e
+
+cd $C3_DIR
+./C3 $TARGET  | clang -x c -std=c89 -fno-checkedc-extension -fsyntax-only - 
