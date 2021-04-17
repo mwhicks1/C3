@@ -19,7 +19,7 @@ rule keyword = parse
 | "itype" { ITYPE }
 | "_Itype_for_any" | "_For_any" { FORANY }
 | "_Ptr" | "_Array_ptr" | "_Nt_array_ptr" { PTR } 
-| "_Checked" | "_Unchecked" { CHECKED }
+| "_Checked" | "_Unchecked" | "_Nt_checked" { CHECKED }
 | "_Dynamic_check" { DYNCHECK }
 | "ptr" | "array_ptr" | "nt_array_ptr" { PTR (* enable this and those next if stdchecked.h included *) }
 | "checked" | "unchecked" { CHECKED }
