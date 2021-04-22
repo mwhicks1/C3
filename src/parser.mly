@@ -44,7 +44,7 @@ bounds:
 | BOUNDS LPAREN insidebounds* RPAREN { None }
 
 insidebounds:
-| LPAREN insidebounds RPAREN { None }
+| LPAREN insidebounds* RPAREN { None }
 | pointer { None }
 | LANGLE { None }
 | RANGLE { None }
