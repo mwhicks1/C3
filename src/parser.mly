@@ -13,7 +13,6 @@
 %token COLON
 %token CHECKED
 %token DYNCHECK
-%token COMMA
 
 %start <(int*int*string) list> main
 
@@ -77,7 +76,7 @@ rettype:
 | c = pointer { c }
 
 paramlist:
-| lst = separated_list(COMMA, param)
+| lst = separated_list(ANY, param)
   { String.concat "" ["("; String.concat "," lst; ")"] }
 
 param:
