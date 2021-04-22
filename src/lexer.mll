@@ -30,6 +30,7 @@ rule keyword = parse
 | "(" { LPAREN }
 | ")" { RPAREN }
 | ":" { COLON }
+| "," { COMMA }
 | "\n" { Lexing.new_line lexbuf; keyword lexbuf; }
 | eof { EOF }
 | _ as c { ANY(String.make 1 c) }

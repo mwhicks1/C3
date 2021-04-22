@@ -13,6 +13,7 @@
 %token COLON
 %token CHECKED
 %token DYNCHECK
+%token COMMA
 
 %start <(int*int*string) list> main
 
@@ -63,6 +64,25 @@ insideitype:
 pointer:
 | PTR LANGLE p = pointer RANGLE { String.concat "" [p; " *"] }
 | PTR LANGLE s = insideptr RANGLE { String.concat "" [s; " *"]}
+(* TODO: correct replacement *)
+| PTR LANGLE fp = fpointer RANGLE name = ID 
+  { let (ret,params) = fp in String.concat "" [ret; "(*"; name; ")"; params] }
+
+fpointer:
+| ret = rettype LPAREN lst = option(paramlist) RPAREN 
+  { (ret, String.concat "" (Option.to_list lst)) }
+
+rettype: 
+| c = ID { c } 
+| c = pointer { c }
+
+paramlist:
+| lst = separated_list(COMMA, param)
+  { String.concat "" ["("; String.concat "," lst; ")"] }
+
+param:
+| c = ID { c }
+| c = pointer { c }
 
 insideptr:
 | c = ANY s = insideptr { String.concat "" [c; s]}
