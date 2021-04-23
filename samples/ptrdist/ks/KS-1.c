@@ -110,7 +110,7 @@ ComputeNetCosts(void)
 {
 #ifdef WEIGHTED
     ModulePtr nn;
-    unsigned long count;
+    unsigned long _count;
 #endif /* WEIGHTED */
     unsigned long i;
 
@@ -118,11 +118,11 @@ ComputeNetCosts(void)
 #ifndef WEIGHTED
 	cost[i] = 1.0;
 #else
-	count = 0;
+	_count = 0;
 	for (nn = nets[i]; nn != NULL; nn = (*nn).next)
-	    count++;
+	    _count++;
 
-	cost[i] = 1.0/((float)count - 1.0);
+	cost[i] = 1.0/((float)_count - 1.0);
 #endif /* WEIGHTED */
     }
 }

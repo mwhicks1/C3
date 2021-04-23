@@ -26,7 +26,7 @@ endif
 	./C3 $$P $^ $(CC) $(CHKCTOOLS) $(CFLAGS) > $$P/$@)
 
 clean:
-	$(RM) $(OBJS) $(PROG) 
+	$(RM) $(OBJS) $(C3_OBJS) $(PROG) 
 
 test:
 	$(PROG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
