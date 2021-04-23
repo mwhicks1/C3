@@ -33,7 +33,7 @@ main:
 annot:
 /* add INCLUDE here; remove _checked, drop stdchecked.h (and note it in lexer) */
 | CHECKED { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
-| DYNCHECK { ($startpos.pos_cnum, $endpos.pos_cnum, "assert") (* idea: replace with a macro with will neuter the check; pick something other than assert *) }
+| DYNCHECK LPAREN insidebounds* RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | FORANY LPAREN ID RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | COLON bounds
     { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
