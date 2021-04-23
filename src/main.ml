@@ -27,8 +27,8 @@ let () =
         let result = Parser.main Lexer.keyword lexbuf in
         format s result
     with
-    | Parser.Error ->
+    | _ ->
         let pos =  Lexing.lexeme_start_p lexbuf in
-        Printf.fprintf stderr "At offset %d:%d syntax error (token %s).\n%!" pos.pos_lnum (pos.pos_cnum-pos.pos_bol) (Lexing.lexeme lexbuf); 
+        Printf.fprintf stderr "At %d:%d syntax error (token %s).\n%!" pos.pos_lnum (pos.pos_cnum-pos.pos_bol) (Lexing.lexeme lexbuf); 
         exit 1
 

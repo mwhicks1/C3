@@ -14,6 +14,7 @@ let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 
 
 rule keyword = parse
+| '/''*'  { let b = Buffer.create 17 in Buffer.add_string b "/*"; comment b lexbuf }
 | [' ' '\t']     { keyword lexbuf }
 | "bounds" | "count" | "byte_count" { BOUNDS }
 | "itype" { ITYPE }
@@ -34,3 +35,7 @@ rule keyword = parse
 | eof { EOF }
 | _ as c { ANY(String.make 1 c) }
 
+and comment buf =
+  parse
+  | '*''/'       { Buffer.add_string buf "*/"; ANY (Buffer.contents buf) }
+  | _ as c { Buffer.add_char buf c; comment buf lexbuf }
