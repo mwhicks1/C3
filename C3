@@ -1,7 +1,6 @@
 #!/bin/bash
-set -o xtrace
 set -e
-usage="$0 <basedir> <source> <compiler> <checked c tools> <args>"
+usage="$0 <source> <compiler> <checked c tools> <compiler args> <outputfile>"
 
 if [ -z $1 ] 
 then
@@ -33,11 +32,14 @@ then
   exit 1
 fi
 
-# base=$(realpath $1)
-base=$1
-src=$2
-compiler=$3
-tools=$4
-args=$5
-python3 $tools/utils/port_tools/expand_macros.py $compiler $src tempout $base $args
-dune exec -- src/main.exe -f $base/$src
+src=$1
+fullsrc=$(python3 -c "import os; print(os.path.abspath('$src'))")
+compiler=$2
+tools=$3
+args=$4
+output=$5
+
+
+base=$(dirname $fullsrc)
+python3 $tools/utils/port_tools/expand_macros.py $compiler $fullsrc tempout $base $args
+dune exec -- src/main.exe -f $fullsrc > $output
