@@ -4,6 +4,8 @@ OBJS = anagram.o
 C3_OBJS = anagram_c3.o
 RUN_OPTIONS = $(PROJ_SRC_DIR)/words 2
 STDIN_FILENAME = $(PROJ_SRC_DIR)/input.OUT
+LEVEL = ../../..
+CHKCTOOLS = ~/checkedc/checkedc-clang/clang/tools/3c
 
 CFLAGS = -I..
 
@@ -17,6 +19,11 @@ endif
 
 .c.o:
 	$(CC) -c $*.c $(CFLAGS) $(IFLAGS)
+
+%_c3.c: %.c
+	(P=$$PWD; \
+	cd $(LEVEL); \
+	./C3 $$P $^ $(CC) $(CHKCTOOLS) $(CFLAGS) > $$P/$@)
 
 clean:
 	$(RM) $(OBJS) $(PROG) 

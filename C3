@@ -1,6 +1,6 @@
 #!/bin/bash
-set -o xtrace
-set -e
+# set -o xtrace
+# set -e
 usage="$0 <basedir> <source> <compiler> <checked c tools> <args>"
 
 if [ -z $1 ] 
