@@ -140,7 +140,7 @@
 
 jmp_buf jbAnagram;
 
-#pragma CHECKED_SCOPE ON
+/*#pragma CHECKED_SCOPE ON*/
 
 /* Before compiling, make sure Quad and MASK_BITS are set properly.  For best
  * results, make Quad the largest integer size supported on your machine.
@@ -472,7 +472,7 @@ AddWords(void) {
             unsigned char wordLength = pch[0];
             char * wordStart = pch;
             char * wordEnd = pch+wordLength;
-            assert(wordEnd <= pchUpperBounds);
+            ;
              { BuildWord(pch+2, wordStart, wordEnd); }
         }
         pch += *pch;
@@ -552,8 +552,8 @@ void FindAnagram(Quad * pqMask ,
     Debug(printf("Pivoting on %c\n", i2ch(achByFrequency[iLetter]));)
 
     // Manually Hoisted Check, (including path condition) from first iteration of the loop.
-    assert(ppwStart != NULL);
-    assert(ppwStart < ppwEnd && ppwEnd <= (apwCand+MAXCAND));
+    ;
+    ;
 
     while (ppwStart < ppwEnd) {          /* Half of the program execution */
         pw = *ppwStart;                  /* time is spent in these three */
