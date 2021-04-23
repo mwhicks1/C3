@@ -33,10 +33,11 @@ then
   exit 1
 fi
 
-base=$(realpath $1)
+# base=$(realpath $1)
+base=$1
 src=$2
 compiler=$3
 tools=$4
 args=$5
-$tools/utils/port_tools/expand_macros.py $compiler $src tempout $base $args
+python3 $tools/utils/port_tools/expand_macros.py $compiler $src tempout $base $args
 dune exec -- src/main.exe -f $base/$src

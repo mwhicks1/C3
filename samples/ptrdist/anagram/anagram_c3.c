@@ -250,8 +250,8 @@ unsigned long pchDictionarySize;
 char * pchDictionary ;               /* the dictionary is read here */
 
 #define Zero(t) memset(t, 0, sizeof(t)) /* quickly zero out an integer array */
-#define fprintf(...)  { fprintf(__VA_ARGS__); }
-#define printf(...)  { printf(__VA_ARGS__); }
+#define fprintf(...)  { (fprintf)(__VA_ARGS__); }
+#define printf(...)  { (printf)(__VA_ARGS__); }
 
 /* Fatal -- print a message before expiring */
 void Fatal(const char * pchMsg, unsigned u) {
