@@ -27,9 +27,16 @@ then
   exit 1
 fi
 
+if [ -z $5 ] 
+then
+  echo $usage
+  exit 1
+fi
+
 base=$(realpath $1)
 src=$2
 compiler=$3
 tools=$4
-$tools/utils/port_tools/expand_macros.py $compiler $src tempout $base $5
+args=$5
+$tools/utils/port_tools/expand_macros.py $compiler $src tempout $base $args
 dune exec -- src/main.exe -f $base/$src
