@@ -140,7 +140,6 @@
 
 jmp_buf jbAnagram;
 
-/*#pragma CHECKED_SCOPE ON*/
 
 /* Before compiling, make sure Quad and MASK_BITS are set properly.  For best
  * results, make Quad the largest integer size supported on your machine.

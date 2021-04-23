@@ -3,6 +3,7 @@
 %token BOUNDS
 %token ITYPE
 %token <string> ANY
+%token <int * int> PRAGMA
 %token <string> ID
 %token EOF
 %token LANGLE
@@ -33,6 +34,7 @@ main:
 annot:
 /* add INCLUDE here; remove _checked, drop stdchecked.h (and note it in lexer) */
 | CHECKED { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
+| p = PRAGMA { let (s,e) = p in (s, e, "") }
 | DYNCHECK LPAREN insidebounds* RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | FORANY LPAREN ID RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | COLON bounds
