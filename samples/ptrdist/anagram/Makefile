@@ -16,6 +16,6 @@ clean:
 	$(RM) $(OBJS) $(PROG) 
 
 test:
-	$(SIM) ./anagram $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
+	$(PROG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
 	diff -w anagram.reference_output FOO
 	$(RM) FOO
