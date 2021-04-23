@@ -19,7 +19,6 @@ rule keyword = parse
                         let _ = pragma lexbuf in
                         let end_p = Lexing.lexeme_end lexbuf in
                         Lexing.new_line lexbuf;
-                        (* Printf.printf "%d -- %d\n" start_p end_p; *)
                         PRAGMA(start_p,end_p)  }
 | "bounds" | "count" | "byte_count" { BOUNDS }
 | "itype" { ITYPE }
