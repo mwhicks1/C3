@@ -28,12 +28,12 @@ $(C3_OBJS): conv/assign.h conv/hcg.h conv/option.h conv/vcg.h conv/channel.h con
 conv/%.c: %.c
 	(P=$$PWD; \
 	cd $(LEVEL); \
-	./C3 $$P $^ $(CC) $(CHKCTOOLS) "$(CFLAGS)" > $$P/$@)
+	./C3 $$P $^ $(CC) $(CHKCTOOLS) $(CFLAGS) > $$P/$@)
 
 conv/%.h: %.h
 	(P=$$PWD; \
 	cd $(LEVEL); \
-	./C3 $$P $^ $(CC) $(CHKCTOOLS) "$(CFLAGS)" > $$P/$@)
+	./C3 $$P $^ $(CC) $(CHKCTOOLS) $(CFLAGS) > $$P/$@)
 
 clean:
 	$(RM) $(OBJS) $(C3_OBJS) $(PROG) 
