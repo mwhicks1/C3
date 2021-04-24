@@ -17,6 +17,7 @@ itype(.* ) bounds( * ) as a token
 let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 let bounds = "bounds" | "count" | "byte_count"
 let pid = "malloc" | "calloc" | "free" | "realloc"                                    
+
 rule keyword = parse
 | ['/']['*']  { let b = Buffer.create 17 in Buffer.add_string b "/*"; comment b lexbuf }
 | [' ' '\t']     { keyword lexbuf }
@@ -29,11 +30,13 @@ rule keyword = parse
 | "_Ptr" | "_Array_ptr" | "_Nt_array_ptr" { PTR } 
 | "_Checked" | "_Unchecked" | "_Nt_checked" { CHECKED }
 | "_Dynamic_check" { DYNCHECK }
+| "_Assume_bounds_cast" { ASSUME_CAST }
 | "ptr" | "array_ptr" | "nt_array_ptr" { PTR (* enable this and those next if stdchecked.h included *) }
 | "checked" | "unchecked" { CHECKED }
 | "dynamic_check" { DYNCHECK }
 | pid { PID(Lexing.lexeme lexbuf) }
 | id { ID(Lexing.lexeme lexbuf) }
+| "," { COMMA }
 | "<" { LANGLE }
 | ">" { RANGLE }
 | "(" { LPAREN }
