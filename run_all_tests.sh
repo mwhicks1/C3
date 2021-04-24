@@ -20,7 +20,7 @@ do
   echo testing $test_case
   full=./tests/checked_cases/$test_case
   LASTCASE=$full
-  ./tests/test_checked.sh $full
+  C3_DIR=. ./tests/test_checked.sh $full
 done
 
 LASTCASE=

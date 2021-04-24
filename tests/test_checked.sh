@@ -19,4 +19,7 @@ TARGET=$(realpath $1)
 set -e
 
 cd $C3_DIR
-./C3 $TARGET  | clang -x c -std=c89 -fno-checkedc-extension -fsyntax-only - 
+#CC="clang -x c -std=c89 -fno-checkedc-extension -fsyntax-only"
+CC="clang -x c -std=c89 -fsyntax-only"
+# ./C3 $TARGET  | $CC - 
+dune exec -- src/main.exe -f $TARGET | $CC -
