@@ -12,14 +12,14 @@
 
 #ifndef FILE
 #ifdef TORONTO
-#include <stdio_checked.h>
+#include <stdio.h>
 #else
 #  include "stdio.h"
 #endif
 #endif
 
-#include <math_checked.h>
-#include <stdlib_checked.h>
+#include <math.h>
+#include <stdlib.h>
 
 
 /*

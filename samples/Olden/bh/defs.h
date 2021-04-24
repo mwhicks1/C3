@@ -7,7 +7,7 @@
  */
 
 #ifdef TORONTO
-#include <stdio_checked.h>
+#include <stdio.h>
 #define chatting printf
 #define PLAIN
 #define LOCAL(xxx) xxx
