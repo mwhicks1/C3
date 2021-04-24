@@ -14,7 +14,8 @@ then
   exit 1
 fi
 
-TARGET=$(realpath $1)
+# TARGET=$(realpath $1)
+TARGET=$1
 
 set -e
 
