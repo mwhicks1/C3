@@ -15,29 +15,28 @@
 
 #include "KS.h"
 
-#pragma CHECKED_SCOPE ON
 
-NetPtr modules _Checked [G_SZ];		/* all modules -> nets */
+NetPtr modules  [G_SZ];		/* all modules -> nets */
 unsigned long numModules;
 
-ModulePtr nets _Checked [G_SZ];	     	/* all nets -> modules */
+ModulePtr nets  [G_SZ];	     	/* all nets -> modules */
 unsigned long numNets;
 
 ModuleList groupA, groupB;			/* current A, B */
 ModuleList swapToA, swapToB;			/* swapped from A,B, ordered */
-float GP _Checked [G_SZ];			/* GPs, ordered */
+float GP  [G_SZ];			/* GPs, ordered */
 
-Groups moduleToGroup _Checked [G_SZ];	/* current inverse mapping */
-float D _Checked [G_SZ];			/* module costs */
-float cost _Checked [G_SZ];			/* net costs */
+Groups moduleToGroup  [G_SZ];	/* current inverse mapping */
+float D  [G_SZ];			/* module costs */
+float cost  [G_SZ];			/* net costs */
 
 
 /* read the netlist into the nets[] structure */
 void
-ReadNetList(_Nt_array_ptr<char> fname)
+ReadNetList(char * fname)
 {
-    _Ptr<FILE> inFile = 0;
-    char line _Nt_checked[BUF_LEN + 1] = { 0 };
+    FILE * inFile = 0;
+    char line [BUF_LEN + 1] = { 0 };
     unsigned long net, dest;
     ModulePtr node = 0, prev = 0, head = 0;
 
@@ -46,7 +45,7 @@ ReadNetList(_Nt_array_ptr<char> fname)
 	"unable to open input file [%s]", fname, 0, 0,
 	exit(1));
 
-    _Unchecked { TRY(fgets(line, BUF_LEN, inFile),
+     { TRY(fgets(line, BUF_LEN, inFile),
 	sscanf((const char*)line, "%lu %lu", &numNets, &numModules) == 2, "ReadData",
 	"unable to parse header in file [%s]", fname, 0, 0,
 	exit(1)); }
@@ -64,7 +63,7 @@ ReadNetList(_Nt_array_ptr<char> fname)
 	    exit(1));
 	(*prev).module = atol(strtok(NULL, " \t\n"))-1;
 	(*prev).next = NULL;
-    _Nt_array_ptr<char> tok = NULL;
+    char * tok = NULL;
 	while ((tok = strtok(NULL, " \t\n")) != NULL) {
 	    TRY(node = calloc<Module>(1, sizeof(Module)),
 		node != NULL, "ReadData",
