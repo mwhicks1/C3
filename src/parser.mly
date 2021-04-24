@@ -37,15 +37,13 @@ annot:
 | p = PRAGMA { let (s,e) = p in (s, e, "") }
 | DYNCHECK LPAREN insidebounds* RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | FORANY LPAREN ID RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
-| p = bounds
-    { let (s,_) = p in (s, $endpos.pos_cnum, "") }
-| p = itype fakebounds*
-    { let (s,_) = p in (s, $endpos.pos_cnum, "") }
+| p = bounds { let (s,_) = p in (s, $endpos.pos_cnum, "") }
+| p = itype fakebounds* { let (s,_) = p in (s, $endpos.pos_cnum, "") }
 
 bounds:
 | p = COLONBOUNDS LPAREN insidebounds* RPAREN { p }
 
-fakebounds:
+fakebounds: /* I am assuming ID will be count, bounds, or byte_count */
 | ID LPAREN insidebounds* RPAREN { None }
 
 insidebounds:
