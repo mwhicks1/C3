@@ -34,24 +34,24 @@
 void
 AllocVCG(void)
 {
-    VCG = malloc<nodeVCGType>((channelNets + 1) * sizeof(nodeVCGType));
-    storageRootVCG = malloc<constraintVCGType>((channelNets + 1) * (channelNets + 1) * sizeof(constraintVCGType));
+    VCG = malloc((channelNets + 1) * sizeof(nodeVCGType));
+    storageRootVCG = malloc((channelNets + 1) * (channelNets + 1) * sizeof(constraintVCGType));
     storageVCG = storageRootVCG;
     storageLimitVCG = (channelNets + 1) * (channelNets + 1);
-    SCC = malloc<ulong>((channelNets + 1) * sizeof(ulong));
-    perSCC = malloc<ulong>((channelNets + 1) * sizeof(ulong));
-    removeVCG = malloc<constraintVCGType *>((channelNets + 1) * (channelNets + 1) * sizeof(constraintVCGType *));
+    SCC = malloc((channelNets + 1) * sizeof(ulong));
+    perSCC = malloc((channelNets + 1) * sizeof(ulong));
+    removeVCG = malloc((channelNets + 1) * (channelNets + 1) * sizeof(constraintVCGType *));
 }
 
 void
 FreeVCG(void)
 {
-     { free<nodeVCGType>(VCG); }
-     { free<constraintVCGType>(storageRootVCG); }
+     { free(VCG); }
+     { free(storageRootVCG); }
     storageLimitVCG = 0;
-     { free<ulong>(SCC); }
-     { free<ulong>(perSCC); }
-     { free<constraintVCGType *>(removeVCG); }
+     { free(SCC); }
+     { free(perSCC); }
+     { free(removeVCG); }
 }
 
 void

@@ -167,12 +167,12 @@ DescribeChannel(void)
     /*
      * Top terminals of channel.
      */
-    TOP = malloc<ulong>((channelColumns+1) * sizeof(ulong));
+    TOP = malloc((channelColumns+1) * sizeof(ulong));
 
     /*
      * Bottom terminals of channel.
      */
-    BOT = malloc<ulong>((channelColumns+1) * sizeof(ulong));
+    BOT = malloc((channelColumns+1) * sizeof(ulong));
 
     /*
      * Initialize terminals of channel.
@@ -268,10 +268,10 @@ DensityChannel(void)
     /*
      * Allocate track dimension structures.
      */
-    FIRST = malloc<ulong>((channelNets+1) * sizeof(ulong));
-    LAST = malloc<ulong>((channelNets+1) * sizeof(ulong));
-    DENSITY = malloc<ulong>((channelColumns+1) * sizeof(ulong));
-    CROSSING = malloc<ulong>((channelNets+1) * sizeof(ulong));
+    FIRST = malloc((channelNets+1) * sizeof(ulong));
+    LAST = malloc((channelNets+1) * sizeof(ulong));
+    DENSITY = malloc((channelColumns+1) * sizeof(ulong));
+    CROSSING = malloc((channelNets+1) * sizeof(ulong));
 
     /*
      * Initialize track dimension structures.

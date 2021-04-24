@@ -54,10 +54,10 @@ void
 InitAllocMaps(void)
 {
     /* allocate maps */
-    horzPlane = malloc<char>((channelColumns+1)*(channelTracks+3));
-    vertPlane = malloc<char>((channelColumns+1)*(channelTracks+3));
-    viaPlane = malloc<char>((channelColumns+1)*(channelTracks+3));
-    mazeRoute = malloc<char>((channelColumns+1));
+    horzPlane = malloc((channelColumns+1)*(channelTracks+3));
+    vertPlane = malloc((channelColumns+1)*(channelTracks+3));
+    viaPlane = malloc((channelColumns+1)*(channelTracks+3));
+    mazeRoute = malloc((channelColumns+1));
 
 
     /* if (!horzPlane || !vertPlane || !viaPlane || !mazeRoute) { */
@@ -72,10 +72,10 @@ InitAllocMaps(void)
 void
 FreeAllocMaps(void)
 {
-     { free<char>(horzPlane); }
-     { free<char>(vertPlane); }
-     { free<char>(viaPlane); }
-     { free<char>(mazeRoute); }
+     { free(horzPlane); }
+     { free(vertPlane); }
+     { free(viaPlane); }
+     { free(mazeRoute); }
 }
 
 

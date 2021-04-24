@@ -31,8 +31,8 @@
 void
 AllocHCG(void)
 {
-    HCG = malloc<nodeHCGType>((channelNets + 1) * sizeof(nodeHCGType));
-    storageRootHCG = malloc<ulong>((channelNets + 1) * (channelNets + 1) * sizeof(ulong));
+    HCG = malloc((channelNets + 1) * sizeof(nodeHCGType));
+    storageRootHCG = malloc((channelNets + 1) * (channelNets + 1) * sizeof(ulong));
      { storageHCG = storageRootHCG; }
     storageLimitHCG = (channelNets + 1) * (channelNets + 1);
 }
@@ -40,8 +40,8 @@ AllocHCG(void)
 void
 FreeHCG(void)
 {
-     { free<nodeHCGType>(HCG); }
-     { free<ulong>(storageRootHCG); }
+     { free(HCG); }
+     { free(storageRootHCG); }
     storageLimitHCG = 0;
 }
 
