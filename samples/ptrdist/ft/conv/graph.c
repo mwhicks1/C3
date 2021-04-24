@@ -225,7 +225,7 @@ NewVertex(void)
 {
   Vertices *  vertex = 0;
 
-  vertex = calloc<Vertices>(1, sizeof(Vertices));
+  vertex = calloc(1, sizeof(Vertices));
 
   if(vertex == NULL)
   {
@@ -245,7 +245,7 @@ NewEdge(void)
 {
   Edges *  edge = 0;
 
-  edge = calloc<Edges>(1, sizeof(Edges));
+  edge = calloc(1, sizeof(Edges));
 
   if(edge == NULL)
   {

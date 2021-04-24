@@ -143,7 +143,7 @@ DeleteMin(HeapP *  h)
 
   if(h1 == NULL)
   {
-    free<HeapP>(h);
+    free(h);
     return(NULL);
   }
 
@@ -265,7 +265,7 @@ DeleteMin(HeapP *  h)
     }
   }
 
-  free<HeapP>(h);
+  free(h);
 
   return(min);
 }
@@ -387,7 +387,7 @@ Delete(HeapP *  h, HeapP *  i)
     while(h1 != CHILD(i));
   }
 
-  free<HeapP>(i);
+  free(i);
   return(h);
 }
 
@@ -498,7 +498,7 @@ NewHeap(Item *  i)
 {
   HeapP *  h = 0;
 
-  h = calloc<HeapP>(1, sizeof(HeapP));
+  h = calloc(1, sizeof(HeapP));
 
   if(h == NULL)
   {
