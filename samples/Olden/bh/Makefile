@@ -22,10 +22,10 @@ CHKCTOOLS = ~/checkedc/checkedc-clang/clang/tools/3c
 
 ifdef C3
 $(PROG): $(C3_OBJS)
-	$(CC) -o $@ $(C3_OBJS) 
+	$(CC) -o $@ $(C3_OBJS) $(LDFLAGS) 
 else
 $(PROG): $(OBJS)
-	$(CC) -o $@ $(OBJS) 
+	$(CC) -o $@ $(OBJS) $(LDFLAGS) 
 endif
 
 .c.o:
