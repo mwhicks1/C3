@@ -1,7 +1,7 @@
 
 %token PTR
-%token BOUNDS
-%token ITYPE
+%token <int * int> COLONBOUNDS
+%token <int * int> COLONITYPE
 %token <string> ANY
 %token <int * int> PRAGMA
 %token <string> ID
@@ -37,13 +37,16 @@ annot:
 | p = PRAGMA { let (s,e) = p in (s, e, "") }
 | DYNCHECK LPAREN insidebounds* RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | FORANY LPAREN ID RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
-| COLON bounds
-    { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
-| COLON itype bounds*
-    { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
+| p = bounds
+    { let (s,_) = p in (s, $endpos.pos_cnum, "") }
+| p = itype fakebounds*
+    { let (s,_) = p in (s, $endpos.pos_cnum, "") }
 
 bounds:
-| BOUNDS LPAREN insidebounds* RPAREN { None }
+| p = COLONBOUNDS LPAREN insidebounds* RPAREN { p }
+
+fakebounds:
+| ID LPAREN insidebounds* RPAREN { None }
 
 insidebounds:
 | LPAREN insidebounds* RPAREN { None }
@@ -55,7 +58,7 @@ insidebounds:
 | ANY { None }
 
 itype:
-| ITYPE LPAREN insideitype* RPAREN { None }
+| p = COLONITYPE LPAREN insideitype* RPAREN { p }
 
 insideitype:
 | pointer { None }
