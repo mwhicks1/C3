@@ -5,6 +5,7 @@
 %token <string> ANY
 %token <int * int> PRAGMA
 %token <string> ID
+%token <string> PID
 %token EOF
 %token LANGLE
 %token RANGLE
@@ -27,9 +28,13 @@ main:
 | LANGLE m = main { m }
 | RANGLE m = main { m }
 | COLON m = main { m }
+| PID popt = instvar? m = main { match popt with Some p -> p::m | None -> m }
 | ID m = main { m }
 | ANY m = main { m }
 | EOF { [] }
+
+instvar:
+| LANGLE insideitype* RANGLE  { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 
 annot:
 /* add INCLUDE here; remove _checked, drop stdchecked.h (and note it in lexer) */
