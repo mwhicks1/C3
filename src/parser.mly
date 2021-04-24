@@ -37,10 +37,11 @@ main:
 | ANY m = main { m }
 | EOF { [] }
 
-cast: (* Might want to change the insideitype* part into a normal C cast; not currently supported *)
-  | ASSUME_CAST LANGLE insideitype* RANGLE LPAREN x = expr COMMA insidebounds* RPAREN { let (s,e) = x in ($startpos.pos_cnum, s, "")::(e, $endpos.pos_cnum, "")::[] }
-  | ASSUME_CAST LANGLE insideitype* RANGLE LPAREN x = expr RPAREN { let (s,e) = x in ($startpos.pos_cnum, s, "")::(e, $endpos.pos_cnum, "")::[] }
+cast: (* Might want to remember the typeinst part and add a normal C cast; not currently supported *)
+  | ASSUME_CAST LANGLE typeinst RANGLE LPAREN x = expr COMMA insidebounds* RPAREN { let (s,e) = x in ($startpos.pos_cnum, s, "")::(e, $endpos.pos_cnum, "")::[] }
+  | ASSUME_CAST LANGLE typeinst RANGLE LPAREN x = expr RPAREN { let (s,e) = x in ($startpos.pos_cnum, s, "")::(e, $endpos.pos_cnum, "")::[] }
 
+typeinst: insideitype+ { ($startpos.pos_cnum, $endpos.pos_cnum) }
 expr: expr_comp+ { ($startpos.pos_cnum, $endpos.pos_cnum) }
                                               
 expr_comp:
