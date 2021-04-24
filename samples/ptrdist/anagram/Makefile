@@ -4,12 +4,11 @@ OBJS = anagram.o
 C3_OBJS = $(addprefix conv/,$(OBJS))
 RUN_OPTIONS = $(PROJ_SRC_DIR)/words 2
 STDIN_FILENAME = $(PROJ_SRC_DIR)/input.OUT
-LEVEL = ../../..
-CHKCTOOLS = ~/checkedc/checkedc-clang/clang/tools/3c
+C3 = ../../../_build/default/src/main.exe
 
 CFLAGS = -I..
 
-ifdef C3
+ifdef DOC3
 $(PROG): $(C3_OBJS)
 	$(CC) -o $@ $(C3_OBJS) 
 else
@@ -21,9 +20,7 @@ endif
 	$(CC) -c $*.c $(CFLAGS) $(IFLAGS) -o $@
 
 conv/%.c: %.c
-	(P=$$PWD; \
-	cd $(LEVEL); \
-	./C3 $$P $^ $(CC) $(CHKCTOOLS) $(CFLAGS) > $$P/$@)
+	$(C3) -f $^ > $@
 
 clean:
 	$(RM) $(OBJS) $(C3_OBJS) $(PROG) 

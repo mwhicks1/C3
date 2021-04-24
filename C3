@@ -1,41 +1,23 @@
 #!/bin/bash
 # set -o xtrace
 # set -e
-usage="$0 <basedir> <source> <compiler> <checked c tools> [args...]"
+usage="$0 <file>"
 
-if [ -z $1 ] 
-then
-  echo $usage
-  exit 1
-fi
+# if [ $# -lt 4 ] 
+# then
+#  echo $usage
+#  exit 1
+# fi
 
-if [ -z $2 ] 
-then
-  echo $usage
-  exit 1
-fi
+# base=$1
+# src=$2
+# compiler=$3
+# tools=$4
+# shift
+# shift
+# shift
+# shift
+# args=$*
+# python3 $tools/utils/port_tools/expand_macros.py $compiler $src tempout $base $args
 
-if [ -z $3 ]
-then
-  echo $usage 
-  exit 1
-fi
-
-if [ -z $4 ]
-then
-  echo $usage 
-  exit 1
-fi
-
-# base=$(realpath $1)
-base=$1
-src=$2
-compiler=$3
-tools=$4
-shift
-shift
-shift
-shift
-args=$*
-python3 $tools/utils/port_tools/expand_macros.py $compiler $src tempout $base $args
-dune exec -- src/main.exe -f $base/$src
+dune exec -- src/main.exe -f $1

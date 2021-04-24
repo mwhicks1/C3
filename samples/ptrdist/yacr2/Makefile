@@ -7,12 +7,10 @@ PROG = yacr2
 RUN_OPTIONS += $(PROJ_SRC_DIR)/input2.in
 OUTPUT = OUT
 
-LEVEL = ../../..
-CHKCTOOLS = ~/checkedc/checkedc-clang/clang/tools/3c
-
+C3 = ../../../_build/default/src/main.exe
 CFLAGS = -I.. -DTODD
 
-ifdef C3
+ifdef DOC3
 $(PROG): $(C3_OBJS)
 	$(CC) -o $@ $(C3_OBJS) 
 else
@@ -26,14 +24,10 @@ endif
 $(C3_OBJS): conv/assign.h conv/hcg.h conv/option.h conv/vcg.h conv/channel.h conv/maze.h conv/types.h
 
 conv/%.c: %.c
-	(P=$$PWD; \
-	cd $(LEVEL); \
-	./C3 $$P $^ $(CC) $(CHKCTOOLS) $(CFLAGS) > $$P/$@)
+	$(C3) -f $^ > $@
 
 conv/%.h: %.h
-	(P=$$PWD; \
-	cd $(LEVEL); \
-	./C3 $$P $^ $(CC) $(CHKCTOOLS) $(CFLAGS) > $$P/$@)
+	$(C3) -f $^ > $@
 
 clean:
 	$(RM) $(OBJS) $(C3_OBJS) $(PROG) 
