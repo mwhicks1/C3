@@ -136,7 +136,6 @@
 #include <sys/stat.h>
 #include <setjmp.h>
 #include <unistd.h>
-#include "hacks.h"
 
 jmp_buf jbAnagram;
 
