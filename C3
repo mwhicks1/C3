@@ -1,7 +1,7 @@
 #!/bin/bash
 # set -o xtrace
 # set -e
-usage="$0 <basedir> <source> <compiler> <checked c tools> <args>"
+usage="$0 <basedir> <source> <compiler> <checked c tools> [args...]"
 
 if [ -z $1 ] 
 then
@@ -27,17 +27,15 @@ then
   exit 1
 fi
 
-if [ -z $5 ] 
-then
-  echo $usage
-  exit 1
-fi
-
 # base=$(realpath $1)
 base=$1
 src=$2
 compiler=$3
 tools=$4
-args=$5
+shift
+shift
+shift
+shift
+args=$*
 python3 $tools/utils/port_tools/expand_macros.py $compiler $src tempout $base $args
 dune exec -- src/main.exe -f $base/$src
