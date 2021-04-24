@@ -23,6 +23,8 @@ $(C3_PROG): $(C3_OBJS)
 .c.o:
 	$(CC) -c $*.c $(CFLAGS) $(IFLAGS) -o $@
 
+.PRECIOUS: conv/%.c
+
 conv/%.c: %.c
 	$(C3) -f $^ > $@
 
