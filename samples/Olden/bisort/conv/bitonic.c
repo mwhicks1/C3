@@ -129,8 +129,12 @@ Bimerge(HANDLE * root, int spr_val, int dir)
 
 { int rightexchange;
   int elementexchange;
-  HANDLE * pl = NIL, pll = NIL, plr = NIL;
-  HANDLE * pr = NIL, prl = NIL, prr = NIL;
+  HANDLE * pl = NIL;
+  HANDLE * pll = NIL;
+  HANDLE * plr = NIL;
+  HANDLE * pr = NIL;
+  HANDLE * prl = NIL;
+  HANDLE * prr = NIL;
   HANDLE * rl = NIL;
   HANDLE * rr = NIL;
   int rv,lv;

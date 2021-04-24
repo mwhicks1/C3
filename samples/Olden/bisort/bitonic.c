@@ -32,7 +32,8 @@ int flag=0,foo=0;
 #define NewNode(h,v,procid) LocalNewNode(h,v)
 
 void InOrder(ptr<HANDLE> h) {
-  ptr<HANDLE> l = NIL, r = NIL;
+  ptr<HANDLE> l = NIL;
+  ptr<HANDLE> r = NIL;
   if ((h != NIL)) {
     l = h->left;
     r = h->right;
@@ -129,8 +130,12 @@ Bimerge(ptr<HANDLE> root, int spr_val, int dir)
 
 { int rightexchange;
   int elementexchange;
-  ptr<HANDLE> pl = NIL, pll = NIL, plr = NIL;
-  ptr<HANDLE> pr = NIL, prl = NIL, prr = NIL;
+  ptr<HANDLE> pl = NIL;
+  ptr<HANDLE> pll = NIL;
+  ptr<HANDLE> plr = NIL;
+  ptr<HANDLE> pr = NIL;
+  ptr<HANDLE> prl = NIL;
+  ptr<HANDLE> prr = NIL;
   ptr<HANDLE> rl = NIL;
   ptr<HANDLE> rr = NIL;
   int rv,lv;
