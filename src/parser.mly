@@ -98,7 +98,7 @@ pointer:
 
 fpointer:
 | ret = rettype LPAREN lst = option(paramlist) RPAREN 
-  { (ret, String.concat "" (Option.to_list lst)) }
+  { (ret, match lst with | None -> "" | Some s -> s ) }
 
 rettype: 
 | c = ID { c } 
