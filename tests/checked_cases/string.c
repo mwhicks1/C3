@@ -5,5 +5,6 @@ void foo(void) {
   char *p = "_Ptr<int> is in a string---should stay!";
   char x = '\'';
   char y = '\"';
-  _Ptr<int> p = 0;
+   // TODO: compiler isn't constant folding when checking bounds, so we need the spurious (size_t) 1 here.
+  _Ptr<int> q = 0;
 }

@@ -15,6 +15,7 @@ let pid = "malloc" | "calloc" | "free" | "realloc"
 
 rule keyword = parse
 | ['/']['*']  { let b = Buffer.create 17 in Buffer.add_string b "/*"; comment b lexbuf }
+| ['/']['/']   { let b = Buffer.create 17 in Buffer.add_string b "//"; line_comment b lexbuf }
 | [' ' '\t']     { keyword lexbuf }
 | ['#']"pragma" { let start_p = Lexing.lexeme_start lexbuf in
                         let _ = pragma lexbuf in
@@ -68,6 +69,11 @@ and comment buf =
 | ['*']['/']       { Buffer.add_string buf "*/"; ANY (Buffer.contents buf) }
  | "\n" { Lexing.new_line lexbuf; Buffer.add_char buf '\n'; comment buf lexbuf; }
   | _ as c { Buffer.add_char buf c; comment buf lexbuf }
+
+and line_comment buf =
+  parse
+ | [^ '\n'] as c { Buffer.add_char buf c; line_comment buf lexbuf }
+ | "\n" { Lexing.new_line lexbuf; Buffer.add_char buf '\n';  ANY (Buffer.contents buf) }
 
 and read_string buf =
   parse
