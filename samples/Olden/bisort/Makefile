@@ -1,11 +1,17 @@
 LEVEL = ../../..
+PROJ_SRC_DIR = .
 
-OBJS = args.o bitonic.o
-C3_OBJS = $(addprefix conv/,$(OBJS))
+SOURCES = args.c bitonic.c
+C3_HDRS = $(addprefix conv/,node.h proc.h)
+C3_SOURCES = $(addprefix conv/,$(SOURCES))
+OBJS = $(SOURCES:.c=.o)
+C3_OBJS = $(C3_SOURCES:.c=.o)
 PROG     = bisort
+C3_PROG = $(PROG)_c3
 
 CFLAGS = -DTORONTO
 LDFLAGS  = -lm
+C3 = ../../../_build/default/src/main.exe
 
 ifdef LARGE_PROBLEM_SIZE
 RUN_OPTIONS = 40000000
@@ -15,36 +21,33 @@ RUN_OPTIONS = 700000
 OUTPUT = bisort.reference_output
 endif
 
-CHKCTOOLS = ~/checkedc/checkedc-clang/clang/tools/3c
+.PRECIOUS: conv/%.c
 
-ifdef C3
-$(PROG): $(C3_OBJS)
-	$(CC) -o $@ $(C3_OBJS) $(LDFLAGS) 
-else
 $(PROG): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDFLAGS) 
-endif
+	$(CC) -o $@ $(OBJS) 
+
+$(C3_PROG): $(C3_OBJS)
+	$(CC) -o $@ $(C3_OBJS) 
 
 .c.o:
 	$(CC) -c $*.c $(CFLAGS) $(IFLAGS) -o $@
 
-$(C3_OBJS): $(addprefix conv/,node.h proc.h)
+$(C3_OBJS): $(C3_HDRS)
 
 conv/%.c: %.c
-	(P=$$PWD; \
-	cd $(LEVEL); \
-	./C3 $$P $^ $(CC) $(CHKCTOOLS) $(CFLAGS) > $$P/$@)
+	$(C3) -f $^ > $@
 
 conv/%.h: %.h
-	(P=$$PWD; \
-	cd $(LEVEL); \
-	./C3 $$P $^ $(CC) $(CHKCTOOLS) $(CFLAGS) > $$P/$@)
+	$(C3) -f $^ > $@
 
 clean:
-	$(RM) $(OBJS) $(C3_OBJS) $(PROG) 
+	$(RM) $(OBJS) $(C3_OBJS) $(C3_SOURCES) $(C3_PROG) $(C3_HDRS) $(PROG) 
 
 test:
 	$(PROG) $(RUN_OPTIONS) > FOO 2>&1
+	diff -w $(OUTPUT) FOO
+	$(RM) FOO
+	$(C3_PROG) $(RUN_OPTIONS) > FOO 2>&1
 	diff -w $(OUTPUT) FOO
 	$(RM) FOO
 
