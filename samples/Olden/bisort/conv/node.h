@@ -2,7 +2,7 @@
 
 /* =============== NODE STRUCTURE =================== */
 
-#include <stdchecked.h>
+
 
 
 struct node { 
