@@ -23,11 +23,12 @@ rule keyword = parse
                         PRAGMA(start_p,end_p)  }
 | ['#']"include"[' ' '\t']*"<stdchecked.h>" { stdchecked := true; CHECKED }
 | '"' { let b = Buffer.create 17 in Buffer.add_char b '"'; read_string b lexbuf }
+| '\'' { let b = Buffer.create 17 in Buffer.add_char b '\''; read_char b lexbuf }
 | "_Itype_for_any" | "_For_any" { FORANY }
 | "_Ptr" | "_Array_ptr" | "_Nt_array_ptr" { PTR } 
 | "_Checked" | "_Unchecked" | "_Nt_checked" { CHECKED }
 | "_Dynamic_check" { DYNCHECK }
-| "_Assume_bounds_cast" { ASSUME_CAST }
+| "_Assume_bounds_cast" | "_Dynamic_bounds_cast" { ASSUME_CAST }
 (* Shorthands -- could limit only if !stdchecked, but won't work if not directly included *)
 | "ptr" | "array_ptr" | "nt_array_ptr" { PTR  }
 | "checked" | "unchecked" { CHECKED }
@@ -74,3 +75,9 @@ and read_string buf =
   | '\\' '\n' { Lexing.new_line lexbuf;  Buffer.add_char buf '\\'; Buffer.add_char buf '\n'; read_string buf lexbuf; }
   | '\\' '"'  { Buffer.add_char buf '\\'; Buffer.add_char buf '"'; read_string buf lexbuf }
   | _ as c { Buffer.add_char buf c; read_string buf lexbuf }
+
+and read_char buf =
+  parse
+  | '\''       { Buffer.add_char buf '\''; ANY (Buffer.contents buf) }
+  | '\\' '\''  { Buffer.add_char buf '\\'; Buffer.add_char buf '\''; read_char buf lexbuf }
+  | _ as c { Buffer.add_char buf c; read_char buf lexbuf }
