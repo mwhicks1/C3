@@ -24,6 +24,7 @@
 
 main:
 | p = pointer m = main { ($startpos.pos_cnum , $endpos(p).pos_cnum, p)::m }
+| p = cast m = main { ($startpos.pos_cnum , $endpos(p).pos_cnum, p)::m }
 | p = annot m = main { p::m }
 | LPAREN m = main { m }
 | RPAREN m = main { m }
@@ -32,29 +33,24 @@ main:
 | COLON m = main { m }
 | PID popt = instvar? m = main { match popt with Some p -> p::m | None -> m }
 | ID m = main { m }
-| ps = cast m = main { ps @ m }
 | COMMA m = main { m }
 | ANY m = main { m }
 | EOF { [] }
 
-cast: (* Might want to remember the typeinst part and add a normal C cast; not currently supported *)
-  | ASSUME_CAST LANGLE typeinst RANGLE LPAREN x = expr COMMA insidebounds* RPAREN { let (s,e) = x in ($startpos.pos_cnum, s, "")::(e, $endpos.pos_cnum, "")::[] }
-  | ASSUME_CAST LANGLE typeinst RANGLE LPAREN x = expr RPAREN { let (s,e) = x in ($startpos.pos_cnum, s, "")::(e, $endpos.pos_cnum, "")::[] }
+cast: 
+  | ASSUME_CAST LANGLE  i = insideitype RANGLE LPAREN e = expr COMMA insidebounds* RPAREN { "("^i^")"^e } 
+  | ASSUME_CAST LANGLE  i = insideitype RANGLE LPAREN e = expr RPAREN {  "("^i^")"^e }
 
-typeinst: insideitype+ { ($startpos.pos_cnum, $endpos.pos_cnum) }
-expr: expr_comp+ { ($startpos.pos_cnum, $endpos.pos_cnum) }
-                                              
-expr_comp:
-| LPAREN expr_comp* RPAREN { None }
-| pointer { None }
-| LANGLE { None }
-| RANGLE { None }
-| COLON { None }
-| ID { None }
-| ANY { None }
+expr:
+| LPAREN e = expr RPAREN { "(" ^ e ^ ")" }
+| c = ANY s = expr { String.concat "" [c; s]}
+/* This is not properly capturing whitespace: it assumes there's a space between tokens, but that's not necessarily so. Need to fix lexer.  */
+| c = ID s = expr { String.concat " " [c; s]}
+| c = ANY { c }
+| c = ID { c }
     
 instvar:
-| LANGLE insideitype* RANGLE  { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
+| LANGLE insideitype RANGLE  { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
                         
 annot:
 /* add INCLUDE here; remove _checked, drop stdchecked.h (and note it in lexer) */
@@ -69,10 +65,10 @@ bounds:
 | p = COLONBOUNDS LPAREN insidebounds* RPAREN { p }
 
 fakebounds: /* I am assuming ID will be count, bounds, or byte_count */
-| ID LPAREN insidebounds* RPAREN { None }
+| ID LPAREN insidebounds+ RPAREN { None }
 
 insidebounds:
-| LPAREN insidebounds* RPAREN { None }
+| LPAREN insidebounds+ RPAREN { None }
 | pointer { None }
 | LANGLE { None }
 | RANGLE { None }
@@ -82,12 +78,15 @@ insidebounds:
 | ANY { None }
 
 itype:
-| p = COLONITYPE LPAREN insideitype* RPAREN { p }
+| p = COLONITYPE LPAREN insideitype RPAREN { p }
 
 insideitype:
-| pointer { None }
-| ID { None }
-| ANY { None }
+| c = ANY s = insideitype { String.concat "" [c; s]}
+/* This is not properly capturing whitespace: it assumes there's a space between tokens, but that's not necessarily so. Need to fix lexer.  */
+| c = ID s = insideitype { String.concat " " [c; s]}
+| c = pointer { c }
+| c = ID { c }
+| c = ANY { c }
 
 pointer:
 | PTR LANGLE p = pointer RANGLE { String.concat "" [p; " *"] }
