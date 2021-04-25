@@ -136,7 +136,6 @@
 #include <sys/stat.h>
 #include <setjmp.h>
 #include <unistd.h>
-#include "hacks.h"
 
 jmp_buf jbAnagram;
 
@@ -460,7 +459,6 @@ void
 AddWords(void) {
     _Array_ptr<char> pchLowerBounds = pchDictionary;
     _Array_ptr<char> pchUpperBounds = pchDictionary + pchDictionarySize;
-    /*    UncheckedBoundsInit(_Array_ptr<char>, pch, bounds(pchLowerBounds, pchUpperBounds), pchDictionary) */    /* walk through the dictionary */
     _Array_ptr<char> pch : bounds(pchLowerBounds, pchUpperBounds) = 0; _Unchecked { pch = pchDictionary; }
 
     cpwCand = 0;
@@ -531,7 +529,6 @@ void FindAnagram(_Array_ptr<Quad> pqMask : count(MAX_QUADS),
     register PWord pw = 0;
     Quad qMask;
     unsigned iq;
-    /*    UncheckedBoundsInit(PPWord, ppwEnd, bounds(ppwStart, apwCand+cpwCand), &apwCand[0]) */
     PPWord ppwEnd : bounds(ppwStart, apwCand+cpwCand) = 0; _Unchecked { ppwEnd = &apwCand[0]; }
     ppwEnd += cpwCand;
 

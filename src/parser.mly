@@ -1,10 +1,11 @@
 
 %token PTR
-%token BOUNDS
-%token ITYPE
+%token <int * int> COLONBOUNDS
+%token <int * int> COLONITYPE
 %token <string> ANY
 %token <int * int> PRAGMA
 %token <string> ID
+%token <string> PID
 %token EOF
 %token LANGLE
 %token RANGLE
@@ -12,8 +13,10 @@
 %token RPAREN
 %token FORANY
 %token COLON
+%token COMMA
 %token CHECKED
 %token DYNCHECK
+%token ASSUME_CAST
 
 %start <(int*int*string) list> main
 
@@ -27,23 +30,46 @@ main:
 | LANGLE m = main { m }
 | RANGLE m = main { m }
 | COLON m = main { m }
+| PID popt = instvar? m = main { match popt with Some p -> p::m | None -> m }
 | ID m = main { m }
+| ps = cast m = main { ps @ m }
+| COMMA m = main { m }
 | ANY m = main { m }
 | EOF { [] }
 
+cast: (* Might want to remember the typeinst part and add a normal C cast; not currently supported *)
+  | ASSUME_CAST LANGLE typeinst RANGLE LPAREN x = expr COMMA insidebounds* RPAREN { let (s,e) = x in ($startpos.pos_cnum, s, "")::(e, $endpos.pos_cnum, "")::[] }
+  | ASSUME_CAST LANGLE typeinst RANGLE LPAREN x = expr RPAREN { let (s,e) = x in ($startpos.pos_cnum, s, "")::(e, $endpos.pos_cnum, "")::[] }
+
+typeinst: insideitype+ { ($startpos.pos_cnum, $endpos.pos_cnum) }
+expr: expr_comp+ { ($startpos.pos_cnum, $endpos.pos_cnum) }
+                                              
+expr_comp:
+| LPAREN expr_comp* RPAREN { None }
+| pointer { None }
+| LANGLE { None }
+| RANGLE { None }
+| COLON { None }
+| ID { None }
+| ANY { None }
+    
+instvar:
+| LANGLE insideitype* RANGLE  { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
+                        
 annot:
 /* add INCLUDE here; remove _checked, drop stdchecked.h (and note it in lexer) */
 | CHECKED { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | p = PRAGMA { let (s,e) = p in (s, e, "") }
 | DYNCHECK LPAREN insidebounds* RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | FORANY LPAREN ID RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
-| COLON bounds
-    { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
-| COLON itype bounds*
-    { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
+| p = bounds { let (s,_) = p in (s, $endpos.pos_cnum, "") }
+| p = itype fakebounds* { let (s,_) = p in (s, $endpos.pos_cnum, "") }
 
 bounds:
-| BOUNDS LPAREN insidebounds* RPAREN { None }
+| p = COLONBOUNDS LPAREN insidebounds* RPAREN { p }
+
+fakebounds: /* I am assuming ID will be count, bounds, or byte_count */
+| ID LPAREN insidebounds* RPAREN { None }
 
 insidebounds:
 | LPAREN insidebounds* RPAREN { None }
@@ -51,11 +77,12 @@ insidebounds:
 | LANGLE { None }
 | RANGLE { None }
 | COLON { None }
+| COMMA { None }
 | ID { None }
 | ANY { None }
 
 itype:
-| ITYPE LPAREN insideitype* RPAREN { None }
+| p = COLONITYPE LPAREN insideitype* RPAREN { p }
 
 insideitype:
 | pointer { None }
@@ -78,7 +105,7 @@ rettype:
 | c = pointer { c }
 
 paramlist:
-| lst = separated_list(ANY, param)
+| lst = separated_list(COMMA, param)
   { String.concat "" ["("; String.concat "," lst; ")"] }
 
 param:
