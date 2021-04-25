@@ -17,8 +17,8 @@ void printstats(void);
 void srand48(long);
 long lrand48(void);
 
-#include <stdio_checked.h>
-#include <stdlib_checked.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #pragma CHECKED_SCOPE ON
 #define chatting(...) unchecked { printf(__VA_ARGS__); }

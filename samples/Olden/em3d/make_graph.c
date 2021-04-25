@@ -15,7 +15,6 @@
 #include "em3d.h"
 #include "util.h"
 #include <stdchecked.h>
-#include "hacks.h"
 #pragma CHECKED_SCOPE ON
 
 extern int NumNodes;
@@ -93,7 +92,8 @@ void make_neighbors(ptr<node_t> nodelist, array_ptr<table_arr_t> table : count(P
         }
 
         array_ptr<ptr<node_t>> ub = tmp + j;
-        UncheckedBoundsInit(array_ptr<ptr<node_t>>, tmp2, bounds(tmp2, ub), tmp);
+	array_ptr<ptr<node_t>> tmp2 : bounds(tmp2, ub)  = 0;
+	_Unchecked { tmp2 = tmp; }
         for ( ; tmp2 < ub; tmp2++)
           if (other_node == *tmp2) break;
         k = tmp2 - tmp;
