@@ -22,6 +22,7 @@ rule keyword = parse
                         Lexing.new_line lexbuf;
                         PRAGMA(start_p,end_p)  }
 | ['#']"include"[' ' '\t']*"<stdchecked.h>" { stdchecked := true; CHECKED }
+| '"' { let b = Buffer.create 17 in Buffer.add_char b '"'; read_string b lexbuf }
 | "_Itype_for_any" | "_For_any" { FORANY }
 | "_Ptr" | "_Array_ptr" | "_Nt_array_ptr" { PTR } 
 | "_Checked" | "_Unchecked" | "_Nt_checked" { CHECKED }
@@ -66,3 +67,10 @@ and comment buf =
 | ['*']['/']       { Buffer.add_string buf "*/"; ANY (Buffer.contents buf) }
  | "\n" { Lexing.new_line lexbuf; Buffer.add_char buf '\n'; comment buf lexbuf; }
   | _ as c { Buffer.add_char buf c; comment buf lexbuf }
+
+and read_string buf =
+  parse
+  | '"'       { Buffer.add_char buf '"'; ANY (Buffer.contents buf) }
+  | '\\' '\n' { Lexing.new_line lexbuf;  Buffer.add_char buf '\\'; Buffer.add_char buf '\n'; read_string buf lexbuf; }
+  | '\\' '"'  { Buffer.add_char buf '\\'; Buffer.add_char buf '"'; read_string buf lexbuf }
+  | _ as c { Buffer.add_char buf c; read_string buf lexbuf }
