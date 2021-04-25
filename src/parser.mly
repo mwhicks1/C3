@@ -108,7 +108,12 @@ paramlist:
   { String.concat "" ["("; String.concat "," lst; ")"] }
 
 param:
-| c = ID { c }
+| c1 = ID c2 = ID? c3 = ID? c4 = ID? c5 = ID?
+  { List.fold_right (fun x y -> match (x,y) with 
+    | (None, b) -> b
+    | (Some a, b) -> String.concat " " [a;b]) 
+  [Some c1; c2; c3; c4; c5] "" }
+
 | c = pointer { c }
 
 insideptr:
