@@ -44,8 +44,14 @@ cast:
 expr:
 | LPAREN e = expr RPAREN { "(" ^ e ^ ")" }
 | c = ANY s = expr { String.concat "" [c; s]}
+| LANGLE s = expr { String.concat "" ["<"; s]}
+| RANGLE s = expr { String.concat "" [">"; s]}
+| COLON s = expr { String.concat "" [":"; s]}
 /* This is not properly capturing whitespace: it assumes there's a space between tokens, but that's not necessarily so. Need to fix lexer.  */
 | c = ID s = expr { String.concat " " [c; s]}
+| LANGLE { "<" }
+| RANGLE { ">" }
+| COLON { ":" }
 | c = ANY { c }
 | c = ID { c }
     

@@ -11,7 +11,7 @@
 
 let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 let bounds = "bounds" | "count" | "byte_count"
-let pid = "malloc" | "calloc" | "free" | "realloc"                                    
+let pid = "malloc" | "calloc" | "free" | "realloc" | "memcpy"
 
 rule keyword = parse
 | ['/']['*']  { let b = Buffer.create 17 in Buffer.add_string b "/*"; comment b lexbuf }
@@ -79,6 +79,7 @@ and read_string buf =
   parse
   | '"'       { Buffer.add_char buf '"'; ANY (Buffer.contents buf) }
   | '\\' '\n' { Lexing.new_line lexbuf;  Buffer.add_char buf '\\'; Buffer.add_char buf '\n'; read_string buf lexbuf; }
+  | '\\' '\\'  { Buffer.add_char buf '\\'; Buffer.add_char buf '\\'; read_string buf lexbuf }
   | '\\' '"'  { Buffer.add_char buf '\\'; Buffer.add_char buf '"'; read_string buf lexbuf }
   | _ as c { Buffer.add_char buf c; read_string buf lexbuf }
 
@@ -86,4 +87,5 @@ and read_char buf =
   parse
   | '\''       { Buffer.add_char buf '\''; ANY (Buffer.contents buf) }
   | '\\' '\''  { Buffer.add_char buf '\\'; Buffer.add_char buf '\''; read_char buf lexbuf }
+  | '\\' '\\'  { Buffer.add_char buf '\\'; Buffer.add_char buf '\\'; read_char buf lexbuf }
   | _ as c { Buffer.add_char buf c; read_char buf lexbuf }
