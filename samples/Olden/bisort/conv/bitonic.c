@@ -87,7 +87,7 @@ HANDLE * RandTree(int n, int seed, int node, int level) {
   return h;
 }
 
-// CHECKED-C: The only two conversions that -c-convert could
+// CHECKED-C: The only two conversions that checked-c-convert could
 // perform automatically were these two.
 void SwapValue(HANDLE * l, HANDLE * r) {
   int temp,temp2;
