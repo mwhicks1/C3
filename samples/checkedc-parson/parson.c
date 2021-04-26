@@ -74,10 +74,11 @@
 #define IS_NUMBER_INVALID(x) (((x) * 0.0) != 0.0)
 #endif
 
+_Itype_for_any(T) static _Ptr<void*(size_t s)> parson_malloc : itype(_Ptr<_Array_ptr<T> (size_t s) : byte_count(s)>);
 
-static JSON_Malloc_Function parson_malloc;
-static JSON_Free_Function parson_free;
+_Itype_for_any(T) static _Ptr<void(void*)> parson_free : itype(_Ptr<void (_Array_ptr<T> : byte_count(0))>);
 
+// TODO: use parens to make these to the preprocessor as non-recursive macros
 #define parson_malloc(t, sz) (malloc<t>(sz))
 #define parson_free(t, p)   (free<t>(_Dynamic_bounds_cast<_Array_ptr<t>>(p, byte_count(0))))
 #define parson_free_unchecked(buf) (free(buf))
@@ -699,8 +700,8 @@ static _Nt_array_ptr<char> process_string(_Nt_array_ptr<const char> input : coun
     size_t initial_size = (len + 1) * sizeof(char);
     size_t final_size = 0;
     _Nt_array_ptr<char> output : count(initial_size) = NULL;
-    _Nt_array_ptr<char> output_ptr : bounds(output, output + initial_size) = NULL;
     output = parson_string_malloc(initial_size);
+    _Nt_array_ptr<char> output_ptr : bounds(output, output + initial_size) = NULL;
     if (output == NULL) {
         goto error;
     }
@@ -1213,7 +1214,8 @@ static int append_string(_Nt_array_ptr<char> buf : bounds(buf_start, buf_start +
         boundedString = _Assume_bounds_cast<_Array_ptr<char>>(string, count(len));
     }
     _Dynamic_check(buf >= buf_start && buf + len < buf_start + buf_len);
-    memcpy<char>(_Dynamic_bounds_cast<_Nt_array_ptr<char>>(buf, count(len)),
+    _Nt_array_ptr<char> buf_tmp : count(len) = _Dynamic_bounds_cast<_Nt_array_ptr<char>>(buf, count(len));
+    memcpy<char>(buf_tmp,
                  boundedString,
                  len);
     buf[len] = '\0';
@@ -2224,7 +2226,8 @@ int json_boolean(const JSON_Value *value : itype(_Ptr<const JSON_Value>)) {
     return json_value_get_boolean(value);
 }
 
-void json_set_allocation_functions(JSON_Malloc_Function malloc_fun, JSON_Free_Function free_fun) {
+_Itype_for_any(T) void json_set_allocation_functions(_Ptr<void* (size_t s) : itype(_Array_ptr<T>) byte_count(s)> malloc_fun,
+    _Ptr<void (void* : itype(_Array_ptr<T>) byte_count(0))> free_fun) {
     if(malloc_fun || free_fun) {
         #undef parson_malloc
         #undef parson_free
