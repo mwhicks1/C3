@@ -113,8 +113,17 @@ paramlist:
 | lst = separated_list(COMMA, param)
   { String.concat "" ["("; String.concat "," lst; ")"] }
 
+(* This could use the `list` production, but that causes a reduce reduce 
+ * error. However, I beleive there are only 4 valid type qualifiers
+ * (see https://en.wikipedia.org/wiki/C_data_types#Type_qualifiers) 
+ * plus `unsigned`, so this should cover every case *)
 param:
-| c = ID { c }
+| c1 = ID c2 = ID? c3 = ID? c4 = ID? c5 = ID?
+  { String.concat " " (List.fold_right (fun x y -> match (x,y) with 
+    | (None, b) -> b
+    | (Some a, b) -> a :: b)
+  [Some c1; c2; c3; c4; c5] []) }
+
 | c = pointer { c }
 
 insideptr:
