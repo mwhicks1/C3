@@ -1,7 +1,7 @@
 /* For copyright information, see olden_v1.0/COPYRIGHT */
 
 #include <stdchecked.h>
-#include <stdio_checked.h>
+#include <stdio.h>
 
 struct hash_entry {
   unsigned int key;
