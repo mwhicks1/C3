@@ -1,15 +1,11 @@
-CC = clang
+PROG = parson
+SOURCES = tests.c parson.c
+HDRS = parson.h
+
 CFLAGS = -O0 -g -Wall -Wextra -std=c99 -pedantic-errors
+LDFLAGS =
+C3 = ../../_build/default/src/main.exe
 
-all: test
+OUTPUT = OUT
 
-.PHONY: compile test
-test: tests.c parson.c
-	$(CC) $(CFLAGS) -o $@ tests.c parson.c
-	./$@
-
-compile:
-	$(CC) $(CFLAGS) -o test tests.c parson.c
-
-clean:
-	rm -f test *.o
+include ../Makefile.common
