@@ -78,7 +78,6 @@ _Itype_for_any(T) static _Ptr<void*(size_t s)> parson_malloc : itype(_Ptr<_Array
 
 _Itype_for_any(T) static _Ptr<void(void*)> parson_free : itype(_Ptr<void (_Array_ptr<T> : byte_count(0))>);
 
-// TODO: use parens to make these to the preprocessor as non-recursive macros
 #define parson_malloc(t, sz) (malloc<t>(sz))
 #define parson_free(t, p)   (free<t>(_Dynamic_bounds_cast<_Array_ptr<t>>(p, byte_count(0))))
 #define parson_free_unchecked(buf) (free(buf))
