@@ -102,22 +102,19 @@ pointer:
   { let (ret,params) = fp in String.concat "" [ret; "(*"; name; ")"; params] }
 
 fpointer:
-| ret = rettype LPAREN lst = option(paramlist) RPAREN 
+| ret = qualed_type LPAREN lst = option(paramlist) RPAREN 
   { (ret, match lst with | None -> "" | Some s -> s ) }
 
-rettype: 
-| c = ID { c } 
-| c = pointer { c }
 
 paramlist:
-| lst = separated_list(COMMA, param)
+| lst = separated_list(COMMA, qualed_type)
   { String.concat "" ["("; String.concat "," lst; ")"] }
 
 (* This could use the `list` production, but that causes a reduce reduce 
  * error. However, I beleive there are only 4 valid type qualifiers
  * (see https://en.wikipedia.org/wiki/C_data_types#Type_qualifiers) 
  * plus `unsigned`, so this should cover every case *)
-param:
+qualed_type:
 | c1 = ID c2 = ID? c3 = ID? c4 = ID? c5 = ID?
   { String.concat " " (List.fold_right (fun x y -> match (x,y) with 
     | (None, b) -> b
