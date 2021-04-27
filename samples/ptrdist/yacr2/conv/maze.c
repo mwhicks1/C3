@@ -219,7 +219,7 @@ PrintChannel(void)
 
     printf("           ");
     for (x=1; x<=channelColumns; x++)
-	printf("%%%c%%", VERT(x,0) ? '|' : ' ');
+	printf("%%%c%%", VERT(x,0) ? '|' : /**/ ' ');
     printf("\n");
 
     for (y=1; y<=channelTracks; y++) {
@@ -279,7 +279,7 @@ PrintChannel(void)
 
     printf("           ");
     for (x=1; x<=channelColumns; x++)
-	printf("%%%c%%", VERT(x,channelTracks+1) ? '|' : ' ');
+	printf("%%%c%%", VERT(x,channelTracks+1) ? '|' : /**/ ' ');
     printf("\n");
 
     /* ms digit */
@@ -716,7 +716,7 @@ Maze2Mech(unsigned long bentNet,	/* net to bend */
 	colFree = 1;
 	for (col = xStart;
 	     colFree && (col != xEnd);
-	     col += bXdelta)  { /* search for col */ //  Required for all calls to SegmentFree and DrawSegment
+	     col += bXdelta)  { /* search for col */ // _Unchecked Required for all calls to SegmentFree and DrawSegment
 	    if ((colFree = SegmentFree(horzPlane,	/* bent horz seg */
 			    i, row,
 			    col, row)) &&

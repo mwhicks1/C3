@@ -220,7 +220,7 @@ PrintChannel(void)
 
     printf("           ");
     for (x=1; x<=channelColumns; x++)
-	printf("%%%c%%", VERT(x,0) ? '|' : ' ');
+	printf("%%%c%%", VERT(x,0) ? '|' : /**/ ' ');
     printf("\n");
 
     for (y=1; y<=channelTracks; y++) {
@@ -280,7 +280,7 @@ PrintChannel(void)
 
     printf("           ");
     for (x=1; x<=channelColumns; x++)
-	printf("%%%c%%", VERT(x,channelTracks+1) ? '|' : ' ');
+	printf("%%%c%%", VERT(x,channelTracks+1) ? '|' : /**/ ' ');
     printf("\n");
 
     /* ms digit */
