@@ -4,7 +4,7 @@ HDRS = perimeter.h
 
 CFLAGS = -DTORONTO
 LDFLAGS  = 
-C3 = ../../../_build/default/src/main.exe
+C3 = ../../../_build/default/src/main.exe -c
 
 ifdef LARGE_PROBLEM_SIZE
 RUN_OPTIONS = 12

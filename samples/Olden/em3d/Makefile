@@ -4,7 +4,7 @@ PROG       = em3d
 
 CFLAGS   = -DTORONTO -I..
 LDFLAGS    = 
-C3 = ../../../_build/default/src/main.exe
+C3 = ../../../_build/default/src/main.exe -c
 
 ifdef SMALL_PROBLEM_SIZE
 RUN_OPTIONS = 256 250 35

@@ -4,7 +4,7 @@ HDRS = tree.h
 
 CFLAGS   = -DTORONTO
 LDFLAGS    = 
-C3 = ../../../_build/default/src/main.exe
+C3 = ../../../_build/default/src/main.exe -c
 
 ifdef SMALL_PROBLEM_SIZE
 RUN_OPTIONS = 20

@@ -6,7 +6,21 @@
 
 (* NOTE: More keywords here https://github.com/correctcomputation/checkedc/blob/master/include/stdchecked.h *)
 
-  let stdchecked = ref false;;        
+  let stdchecked = ref false;;
+(*
+#define ptr _Ptr
+#define array_ptr _Array_ptr
+#define nt_array_ptr _Nt_array_ptr
+#define checked _Checked
+#define nt_checked _Nt_checked
+#define unchecked _Unchecked
+#define bounds_only _Bounds_only
+#define where _Where
+#define dynamic_check _Dynamic_check
+#define dynamic_bounds_cast _Dynamic_bounds_cast
+#define assume_bounds_cast _Assume_bounds_cast
+#define return_value _Return_value
+ *)
 }
 
 let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
@@ -31,9 +45,10 @@ rule keyword = parse
 | "_Dynamic_check" { DYNCHECK }
 | "_Assume_bounds_cast" | "_Dynamic_bounds_cast" { ASSUME_CAST }
 (* Shorthands -- could limit only if !stdchecked, but won't work if not directly included *)
-| "ptr" | "array_ptr" | "nt_array_ptr" { PTR  }
-| "checked" | "unchecked" { CHECKED }
-| "dynamic_check" { DYNCHECK  }
+| "ptr" | "array_ptr" | "nt_array_ptr" { if !stdchecked then PTR else ID(Lexing.lexeme lexbuf) }
+| "checked" | "unchecked" | "nt_checked" {if !stdchecked then CHECKED else ID(Lexing.lexeme lexbuf) }
+| "dynamic_check" { if !stdchecked then DYNCHECK else ID(Lexing.lexeme lexbuf) }
+| "assume_bounds_cast" | "dynamic_bounds_cast" { if !stdchecked then ASSUME_CAST else ID(Lexing.lexeme lexbuf) }
 | pid { PID(Lexing.lexeme lexbuf) }
 | id { ID(Lexing.lexeme lexbuf) }
 | "," { COMMA }

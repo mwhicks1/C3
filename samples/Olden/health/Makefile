@@ -4,7 +4,7 @@ HDRS = health.h
 
 CFLAGS = -DTORONTO
 LDFLAGS  = -lm
-C3 = ../../../_build/default/src/main.exe
+C3 = ../../../_build/default/src/main.exe -c
 
 FP_TOLERANCE = 0.001
 

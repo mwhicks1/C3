@@ -4,7 +4,7 @@ PROG     = bisort
 
 CFLAGS = -DTORONTO
 LDFLAGS  = -lm
-C3 = ../../../_build/default/src/main.exe
+C3 = ../../../_build/default/src/main.exe -c
 
 ifdef LARGE_PROBLEM_SIZE
 RUN_OPTIONS = 40000000

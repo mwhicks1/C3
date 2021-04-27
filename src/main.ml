@@ -1,7 +1,8 @@
 let target_file = ref ""
 
 let set_target_file f = target_file := f
-
+let set_stdchecked () = Lexer.stdchecked := true
+                       
 let read_whole_file filename =
     let ch = open_in filename in
     let s = really_input_string ch (in_channel_length ch) in
@@ -18,7 +19,10 @@ let format s result =
     print_string (iter result 0 "")
 
 let () =
-    let speclist = [("-f", Arg.String (set_target_file), "Target checked-c file to convert to c")] in
+  let speclist =
+    [("-f", Arg.String (set_target_file), "Target checked-c file to convert to c");
+     ("-c", Arg.Unit (set_stdchecked), "Assume <stdchecked.h> is included, to use Checked C shorthands");
+    ] in
     let usage_msg = "C3 tool" in
     Arg.parse speclist print_endline usage_msg;
     let s = read_whole_file !target_file in
