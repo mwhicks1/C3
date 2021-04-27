@@ -42,7 +42,7 @@ cast:
   | ASSUME_CAST LANGLE  i = insideitype RANGLE LPAREN e = expr RPAREN {  "("^i^")"^e }
 
 expr:
-| LPAREN e = expr RPAREN { "(" ^ e ^ ")" }
+| LPAREN e = exprcomma* RPAREN {  (String.concat "" ("("::e))^")" }
 | c = ANY s = expr { String.concat "" [c; s]}
 | LANGLE s = expr { String.concat "" ["<"; s]}
 | RANGLE s = expr { String.concat "" [">"; s]}
@@ -54,7 +54,23 @@ expr:
 | COLON { ":" }
 | c = ANY { c }
 | c = ID { c }
-    
+
+exprcomma:
+| LPAREN e = exprcomma* RPAREN { (String.concat "" ("("::e))^")" }
+| c = ANY s = exprcomma { String.concat "" [c; s]}
+| LANGLE s = exprcomma { String.concat "" ["<"; s]}
+| RANGLE s = exprcomma { String.concat "" [">"; s]}
+| COMMA s = exprcomma { String.concat "" [","; s]}
+| COLON s = exprcomma { String.concat "" [":"; s]}
+/* This is not properly capturing whitespace: it assumes there's a space between tokens, but that's not necessarily so. Need to fix lexer.  */
+| c = ID s = exprcomma { String.concat " " [c; s]}
+| LANGLE { "<" }
+| RANGLE { ">" }
+| COLON { ":" }
+| COMMA { "," }
+| c = ANY { c }
+| c = ID { c }
+        
 instvar:
 | LANGLE insideitype RANGLE  { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
                         
