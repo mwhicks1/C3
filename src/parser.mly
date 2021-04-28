@@ -27,7 +27,7 @@
 %%
 
 main:
-| p = pointer m = main { ($startpos.pos_cnum , $endpos(p).pos_cnum, p)::m }
+| p = checkedptr m = main { ($startpos.pos_cnum , $endpos(p).pos_cnum, p)::m }
 | p = cast m = main { ($startpos.pos_cnum , $endpos(p).pos_cnum, p)::m }
 | p = annot m = main { p::m }
 | LPAREN m = main { m }
@@ -95,7 +95,7 @@ fakebounds: /* I am assuming ID will be count, bounds, or byte_count */
 
 insidebounds:
 | LPAREN insidebounds+ RPAREN { None }
-| pointer { None }
+| checkedptr { None }
 | LANGLE { None }
 | RANGLE { None }
 | COLON { None }
@@ -110,12 +110,12 @@ insideitype:
 | c = ANY s = insideitype { String.concat "" [c; s]}
 /* This is not properly capturing whitespace: it assumes there's a space between tokens, but that's not necessarily so. Need to fix lexer.  */
 | c = ID s = insideitype { String.concat " " [c; s]}
-| c = pointer { c }
+| c = checkedptr { c }
 | c = ID { c }
 | c = ANY { c }
 
-pointer:
-| PTR LANGLE p = pointer RANGLE { String.concat "" [p; " *"] }
+checkedptr:
+| PTR LANGLE p = checkedptr RANGLE { String.concat "" [p; " *"] }
 | PTR LANGLE s = insideptr RANGLE { String.concat "" [s; " *"]}
 | PTR LANGLE fp = fpointer RANGLE name = ID 
   { let (ret,params) = fp in String.concat "" [ret; "(*"; name; ")"; params] }
@@ -143,7 +143,7 @@ qualed_type:
     | (Some a, b) -> a :: b)
   [Some c1; c2; c3; c4; c5] []) }
 
-| c = pointer { c }
+| c = checkedptr { c }
 
 insideptr:
 | c = ANY s = insideptr { String.concat "" [c; s]}
