@@ -117,9 +117,11 @@ insideitype:
 pointer:
 | PTR LANGLE p = pointer RANGLE { String.concat "" [p; " *"] }
 | PTR LANGLE s = insideptr RANGLE { String.concat "" [s; " *"]}
-(* TODO: correct replacement *)
 | PTR LANGLE fp = fpointer RANGLE name = ID 
   { let (ret,params) = fp in String.concat "" [ret; "(*"; name; ")"; params] }
+(* "anonymous" function pointers *)
+| PTR LANGLE fp = fpointer RANGLE 
+  { let (ret,params) = fp in String.concat "" [ret; "(*"; ")"; params] }
 
 fpointer:
 | ret = qualed_type LPAREN lst = option(paramlist) RPAREN 
