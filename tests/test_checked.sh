@@ -18,6 +18,7 @@ fi
 TARGET=$1
 
 set -e
+set -o pipefail
 
 cd $C3_DIR
 CC="clang -x c -std=c89 -fsyntax-only"
