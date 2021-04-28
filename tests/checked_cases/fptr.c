@@ -9,6 +9,6 @@ void foo(void) {
   // int (*mapfunc)(unsigned int) = 0;
 }
 
-_Itype_for_any(T) void json_set_allocation_functions(_Ptr<void* (size_t s) : itype(_Array_ptr<T>) byte_count(s)> malloc,
+_Itype_for_any(T) void json_set_allocation_functions(_Ptr<void* (int s) : itype(_Array_ptr<T>) byte_count(s)> malloc,
     _Ptr<void (void* : itype(_Array_ptr<T>) byte_count(0))> free);
 
