@@ -117,19 +117,22 @@ insideitype:
 checkedptr:
 | PTR LANGLE p = checkedptr RANGLE { String.concat "" [p; " *"] }
 | PTR LANGLE s = insideptr RANGLE { String.concat "" [s; " *"]}
-| PTR LANGLE fp = fpointer RANGLE name = ID 
+| PTR LANGLE fp = fpointer RANGLE name = id_or_pid 
   { let (ret,params) = fp in String.concat "" [ret; "(*"; name; ")"; params] }
 (* "anonymous" function pointers *)
 | PTR LANGLE fp = fpointer RANGLE 
   { let (ret,params) = fp in String.concat "" [ret; "(*"; ")"; params] }
 
 fpointer:
-| ret = qualed_type LPAREN lst = option(paramlist) RPAREN 
+| ret = insideptr LPAREN lst = option(paramlist) RPAREN 
+  { (ret, match lst with | None -> "" | Some s -> s ) }
+(* Can this be factored out? I don't know what I'm doing. ~ Matt *)
+| ret = insideptr LPAREN lst = option(paramlist) RPAREN annot
   { (ret, match lst with | None -> "" | Some s -> s ) }
 
 
 paramlist:
-| lst = separated_list(COMMA, qualed_type)
+| lst = separated_list(COMMA, insideptr)
   { String.concat "" ["("; String.concat "," lst; ")"] }
 
 (* This could use the `list` production, but that causes a reduce reduce 
@@ -149,6 +152,11 @@ insideptr:
 | c = ANY s = insideptr { String.concat "" [c; s]}
 (* This is not properly capturing whitespace: it assumes there's a space between tokens, but that's not necessarily so. Need to fix lexer.  *)
 | c = ID s = insideptr { let t = if is_tyvar c then "void" else c in String.concat " " [t; s] }
+| c = ANY annot { c }
+| c = ID annot { let t = if is_tyvar c then "void" else c in t }
 | c = ANY { c }
 | c = ID { let t = if is_tyvar c then "void" else c in t }
 
+id_or_pid:
+| c = ID { c }
+| c = PID { c }
