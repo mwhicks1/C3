@@ -2,7 +2,7 @@ let target_file = ref ""
 
 let set_target_file f = target_file := f
 let set_stdchecked () = Lexer.stdchecked := true
-                       
+
 let read_whole_file filename =
     let ch = open_in filename in
     let s = really_input_string ch (in_channel_length ch) in

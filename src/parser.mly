@@ -1,4 +1,8 @@
+%{
 
+  open Hack
+    
+%}
 %token PTR
 %token <int * int> COLONBOUNDS
 %token <int * int> COLONITYPE
@@ -79,7 +83,7 @@ annot:
 | CHECKED { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | p = PRAGMA { let (s,e) = p in (s, e, "") }
 | DYNCHECK LPAREN insidebounds* RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
-| FORANY LPAREN ID RPAREN { ($startpos.pos_cnum, $endpos.pos_cnum, "") }
+| FORANY LPAREN t = ID RPAREN { note_tyvar t; ($startpos.pos_cnum, $endpos.pos_cnum, "") }
 | p = bounds { let (s,_) = p in (s, $endpos.pos_cnum, "") }
 | p = itype fakebounds* { let (s,_) = p in (s, $endpos.pos_cnum, "") }
 
@@ -141,8 +145,8 @@ qualed_type:
 
 insideptr:
 | c = ANY s = insideptr { String.concat "" [c; s]}
-/* This is not properly capturing whitespace: it assumes there's a space between tokens, but that's not necessarily so. Need to fix lexer.  */
-| c = ID s = insideptr { String.concat " " [c; s]}
+(* This is not properly capturing whitespace: it assumes there's a space between tokens, but that's not necessarily so. Need to fix lexer.  *)
+| c = ID s = insideptr { let t = if is_tyvar c then "void" else c in String.concat " " [t; s] }
 | c = ANY { c }
-| c = ID { c }
+| c = ID { let t = if is_tyvar c then "void" else c in t }
 
