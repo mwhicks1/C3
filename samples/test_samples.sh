@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+# Clean and rebuild 
+(
+cd .. 
+dune clean
+dune build
+)
+
 (
 cd ptrdist
 ./runall.sh
@@ -11,6 +18,7 @@ cd Olden
 )
 (
 cd checkedc-parson
+make clean
 make parson_c3
 ./parson_c3
 )
