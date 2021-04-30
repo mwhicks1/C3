@@ -58,16 +58,10 @@ enum json_result_t {
 typedef int JSON_Status;
 
 
-typedef  void * tmp_malloc_fun(size_t s) ;
-typedef  void tmp_free_fun(void * );
-typedef tmp_malloc_fun * JSON_Malloc_Function;
-typedef tmp_free_fun * JSON_Free_Function;
-
-
 /* Call only once, before calling any other function from parson API. If not called, malloc and free
    from stdlib will be used for all allocations */
-void json_set_allocation_functions(JSON_Malloc_Function malloc_fun, JSON_Free_Function free_fun);
-
+ void json_set_allocation_functions(void *(*malloc)(size_t s),
+    void(*free)(void *));
 /* Sets if slashes should be escaped or not when serializing JSON. By default slashes are escaped.
  This function sets a global setting and is not thread safe. */
 void json_set_escape_slashes(int escape_slashes);

@@ -60,7 +60,7 @@
 #define SIZEOF_TOKEN(a)       (sizeof(a) - 1)
 #define SKIP_CHAR(str)        ((*str)++)
 #define SKIP_WHITESPACES(str) while (isspace((unsigned char)(**str))) { SKIP_CHAR(str); }
-#define MAX(a, b)             ((a) > (b) ? (a) : (b))
+#define MAX(a, b)             ((a) > (b) ? (a) : /**/ (b))
 
 #undef malloc
 #undef free
@@ -71,9 +71,9 @@
 #define IS_NUMBER_INVALID(x) (((x) * 0.0) != 0.0)
 #endif
 
+ static void *(*parson_malloc)(size_t s) ;
 
-static JSON_Malloc_Function parson_malloc;
-static JSON_Free_Function parson_free;
+ static void(*parson_free)(void *) ;
 
 #define parson_malloc(t, sz) (malloc(sz))
 #define parson_free(t, p)   (free((t *)p))
@@ -696,8 +696,8 @@ static char * process_string(const char * input , size_t len) {
     size_t initial_size = (len + 1) * sizeof(char);
     size_t final_size = 0;
     char * output  = NULL;
-    char * output_ptr  = NULL;
     output = parson_string_malloc(initial_size);
+    char * output_ptr  = NULL;
     if (output == NULL) {
         goto error;
     }
@@ -1210,7 +1210,8 @@ static int append_string(char * buf ,
         boundedString = (char *)string;
     }
     ;
-    memcpy((char *)buf,
+    char * buf_tmp  = (char *)buf;
+    memcpy(buf_tmp,
                  boundedString,
                  len);
     buf[len] = '\0';
@@ -2221,7 +2222,8 @@ int json_boolean(const JSON_Value *value ) {
     return json_value_get_boolean(value);
 }
 
-void json_set_allocation_functions(JSON_Malloc_Function malloc_fun, JSON_Free_Function free_fun) {
+ void json_set_allocation_functions(void *(*malloc_fun)(size_t s),
+    void(*free_fun)(void *)) {
     if(malloc_fun || free_fun) {
         #undef parson_malloc
         #undef parson_free
