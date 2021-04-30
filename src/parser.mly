@@ -117,25 +117,34 @@ insideitype:
 checkedptr:
 | PTR LANGLE p = checkedptr RANGLE { String.concat "" [p; " *"] }
 | PTR LANGLE s = insideptr RANGLE { String.concat "" [s; " *"]}
-| PTR LANGLE fp = fpointer RANGLE name = ID 
+| PTR LANGLE fp = fpointer RANGLE name = id_or_pid 
   { let (ret,params) = fp in String.concat "" [ret; "(*"; name; ")"; params] }
 (* "anonymous" function pointers *)
 | PTR LANGLE fp = fpointer RANGLE 
   { let (ret,params) = fp in String.concat "" [ret; "(*"; ")"; params] }
 
 fpointer:
-| ret = qualed_type LPAREN lst = option(paramlist) RPAREN 
-  { (ret, match lst with | None -> "" | Some s -> s ) }
+| ret = param LPAREN lst = option(paramlist) RPAREN 
+  { (ret, tostring lst) }
+(* Can this be factored out? I don't know what I'm doing. ~ Matt *)
+| ret = param LPAREN lst = option(paramlist) RPAREN annot
+  { (ret, tostring lst ) }
 
 
 paramlist:
-| lst = separated_list(COMMA, qualed_type)
+| lst = separated_list(COMMA, param)
   { String.concat "" ["("; String.concat "," lst; ")"] }
+
+
+param:
+| p = checkedptr name = option(ID) b = option(bounds) { let _ = b in String.concat " " [p; tostring name] } 
+| p = insideptr { p }
 
 (* This could use the `list` production, but that causes a reduce reduce 
  * error. However, I beleive there are only 4 valid type qualifiers
  * (see https://en.wikipedia.org/wiki/C_data_types#Type_qualifiers) 
  * plus `unsigned`, so this should cover every case *)
+(* TODO currently unused *)
 qualed_type:
 | c1 = ID c2 = ID? c3 = ID? c4 = ID? c5 = ID?
   { String.concat " " (List.fold_right (fun x y -> match (x,y) with 
@@ -149,6 +158,11 @@ insideptr:
 | c = ANY s = insideptr { String.concat "" [c; s]}
 (* This is not properly capturing whitespace: it assumes there's a space between tokens, but that's not necessarily so. Need to fix lexer.  *)
 | c = ID s = insideptr { let t = if is_tyvar c then "void" else c in String.concat " " [t; s] }
+| c = ANY annot { c }
+| c = ID annot { let t = if is_tyvar c then "void" else c in t }
 | c = ANY { c }
 | c = ID { let t = if is_tyvar c then "void" else c in t }
 
+id_or_pid:
+| c = ID { c }
+| c = PID { c }
