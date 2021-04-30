@@ -26,19 +26,29 @@ $(C3_PROG): $(C3_OBJS)
 
 $(C3_OBJS): $(C3_HDRS)
 
-conv/%.c: %.c
+conv:
+	mkdir $@
+
+conv/%.c: %.c | conv
 	$(C3) -f $^ > $@
 
-conv/%.h: %.h
+conv/%.h: %.h | conv
 	$(C3) -f $^ > $@
 
 clean:
 	$(RM) $(OBJS) $(C3_OBJS) $(C3_SOURCES) $(C3_PROG) $(C3_HDRS) $(PROG) 
 
+# Is it considered useful that the ACTUAL_OUTPUT file is left behind when a test
+# fails? If not, we could set `SHELL = bash` and then use:
+#
+# set -o pipefail; ./$(PROG) ... 2>&1 | diff -w $(OUTPUT) -
+#
+# ~ Matt 2021-04-29
+
 test:
-	$(C3_PROG) $(RUN_OPTIONS) > FOO 2>&1
-	diff -w $(OUTPUT) FOO
-	$(RM) FOO
-	$(PROG) $(RUN_OPTIONS) > FOO 2>&1
-	diff -w $(OUTPUT) FOO
-	$(RM) FOO
+	./$(C3_PROG) $(RUN_OPTIONS) > ACTUAL_OUTPUT 2>&1
+	diff -w $(OUTPUT) ACTUAL_OUTPUT
+	$(RM) ACTUAL_OUTPUT
+	./$(PROG) $(RUN_OPTIONS) > ACTUAL_OUTPUT 2>&1
+	diff -w $(OUTPUT) ACTUAL_OUTPUT
+	$(RM) ACTUAL_OUTPUT

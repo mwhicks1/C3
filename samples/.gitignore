@@ -1,0 +1,38 @@
+# May be left behind when a test fails.
+ACTUAL_OUTPUT
+
+# Build products
+
+*.o
+
+# It seems easier to maintain this list here rather than create a ton of tiny
+# .gitignore files. :/ ~ Matt 2021-04-29
+Olden/bh/bh
+Olden/bh/bh_c3
+Olden/bisort/bisort
+Olden/bisort/bisort_c3
+Olden/em3d/em3d
+Olden/em3d/em3d_c3
+Olden/health/health
+Olden/health/health_c3
+Olden/mst/mst
+Olden/mst/mst_c3
+Olden/perimeter/perimeter
+Olden/perimeter/perimeter_c3
+Olden/power/power
+Olden/power/power_c3
+Olden/treeadd/treeadd
+Olden/treeadd/treeadd_c3
+Olden/tsp/tsp
+Olden/tsp/tsp_c3
+Olden/voronoi/voronoi
+Olden/voronoi/voronoi_c3
+checkedc-parson/parson_c3
+ptrdist/anagram/anagram
+ptrdist/anagram/anagram_c3
+ptrdist/ft/ft
+ptrdist/ft/ft_c3
+ptrdist/ks/ks
+ptrdist/ks/ks_c3
+ptrdist/yacr2/yacr2
+ptrdist/yacr2/yacr2_c3
